@@ -1,11 +1,14 @@
 const Sequelize = require('sequelize')
+const AWS = require('aws-sdk');
+AWS.config.update({region: 'us-east-1'})
 
 exports.sequelize  = null;
 
 exports.loadSequelize = async () => {
-  const sequelize = new Sequelize(process.env.RDS_DB_NAME, process.env.RDS_USERNAME, process.env.RDS_PASSWORD, {
-    host: process.env.RDS_HOSTNAME,
-    port: process.env.RDS_PORT,
+  const ssm = await new AWS.SSM().getParametersByPath({Path: '/db', Recursive: false, WithDecryption: true}).promise()
+  const sequelize = new Sequelize(ssm.Parameters[0].Value, ssm.Parameters[4].Value, ssm.Parameters[2].Value, {
+    host: ssm.Parameters[1].Value,
+    port: parseInt(ssm.Parameters[3].Value),
     dialect: 'postgres',
     pool: {
       max: 2,

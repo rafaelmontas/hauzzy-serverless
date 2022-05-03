@@ -1,5 +1,5 @@
-// const axios = require('axios')
-// const url = 'http://checkip.amazonaws.com/';
+const AWSXRay = require('aws-xray-sdk-core')
+const AWS = AWSXRay.captureAWS(require('aws-sdk'))
 const { loadSequelize, dbConnect } = require('./models/index')
 const { propertyModel } = require('./models/property')
 const { propertyPicturesModel } = require('./models/propertyPictures')
@@ -9,6 +9,8 @@ const Op = Sequelize.Op
 let response;
 let sequelize = null;
 
+AWS.config.update({region: 'us-east-1'})
+const lambda = new AWS.Lambda()
 
 /**
  *

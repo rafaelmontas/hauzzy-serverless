@@ -4,9 +4,13 @@ Description: SAM Template for hauzzy-serverless
 Globals:
   Function:
     Runtime: nodejs12.x
+    Tracing: Active
     Timeout: 30
     Architectures:
         - arm64
+  Api:
+    TracingEnabled: true
+
 
 Resources:
   HauzzyApi:
@@ -59,7 +63,18 @@ Resources:
                 Action:
                   - 'ssm:GetParameter*'
                 Resource: !Sub 'arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/db*'
-
+        -
+          PolicyName: 'FunctionXRayAccess'
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              -
+                Effect: Allow
+                Action:
+                  - 'xray:PutTraceSegments'
+                  - 'xray:PutTelemetryRecords'
+                Resource: '*'
+  
   ParameterStoreEncryptionKeyAlias:
     Type: AWS::KMS::Alias
     Properties:

@@ -10,6 +10,7 @@ let response;
 let sequelize = null;
 
 AWS.config.update({region: 'us-east-1'})
+AWSXRay.setContextMissingStrategy("LOG_ERROR");
 const lambda = new AWS.Lambda()
 
 /**
@@ -55,10 +56,8 @@ exports.lambdaHandler = async (event, context) => {
       response = {
         'statusCode': 200,
         'body': JSON.stringify({
-            message: 'hello world',
             properties: properties.rows,
-            count: properties.count,
-            logs: context.logStreams
+            count: properties.count
         })
       }
     } else {
@@ -147,10 +146,8 @@ exports.lambdaHandler = async (event, context) => {
       response = {
         'statusCode': 200,
         'body': JSON.stringify({
-            message: 'with query string',
             properties: properties.rows,
-            count: properties.count,
-            logs: context.logStreams
+            count: properties.count
         })
       }
     }

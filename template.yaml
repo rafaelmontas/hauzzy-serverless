@@ -132,6 +132,7 @@ Resources:
       Name: hauzzy-serverless-stack-build
       Description: Build process for Hauzzy serverless Application deployed using AWS SAM
       ServiceRole: !GetAtt CodeBuildIAMRole.Arn
+      # TBD
       Artifacts:
         Type: S3
         Location: aws-sam-cli-managed-default-samclisourcebucket-chfgod7k1eyc

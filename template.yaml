@@ -129,7 +129,7 @@ Resources:
   SamCodeBuild:
     Type: AWS::CodeBuild::Project
     Properties:
-      Name: hauzzy-serverless-stack-build-v1
+      Name: hauzzy-serverless-stack-build
       Description: Build process for Hauzzy serverless Application deployed using AWS SAM
       ServiceRole: !GetAtt CodeBuildIAMRole.Arn
       Artifacts:

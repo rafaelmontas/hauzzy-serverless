@@ -126,6 +126,60 @@ Resources:
               - 'kms:DescribeKey'
             Resource: '*'
 
+  SamCodeBuild:
+    Type: AWS::CodeBuild::Project
+    Properties:
+      Name: hauzzy-serverless-stack-build-v1
+      Description: Build process for Hauzzy serverless Application deployed using AWS SAM
+      ServiceRole: !GetAtt CodeBuildIAMRole.Arn
+      Artifacts:
+        Type: S3
+        Location: aws-sam-cli-managed-default-samclisourcebucket-chfgod7k1eyc
+        Name: hauzzy-serverless-stack-build
+        Path: ''
+        NamespaceType: NONE
+        Packaging: NONE
+      Environment:
+        Type: LINUX_CONTAINER
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: aws/codebuild/amazonlinux2-x86_64-standard:2.0
+      Source:
+        Location: https://github.com/rafaelmontas/hauzzy-serverless.git
+        Type: GITHUB
+        GitCloneDepth: 1
+      Triggers:
+        Webhook: true
+        FilterGroups:
+          - - Type: EVENT
+              Pattern: PUSH
+              ExcludeMatchedPattern: false
+      BadgeEnabled: false
+      LogsConfig:
+        CloudWatchLogs: 
+          Status: ENABLED
+        S3Logs:
+          Status: DISABLED
+          EncryptionDisabled: false
+      TimeoutInMinutes: 10
+  
+  CodeBuildIAMRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub 'codebuild-sam-full-access-${AWS::Region}'
+      Description: Provides CodeBuild permission to access API GW, Lambda and Cloudformation
+      #Provide Codebuild permission to assume this role
+      AssumeRolePolicyDocument: {"Version":"2012-10-17","Statement":[{"Effect":"Allow","Principal":{"Service":"codebuild.amazonaws.com"},"Action":"sts:AssumeRole"}]}
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AWSLambda_FullAccess
+        - arn:aws:iam::aws:policy/AmazonAPIGatewayAdministrator
+        - arn:aws:iam::aws:policy/AWSCloudFormationFullAccess
+        - arn:aws:iam::aws:policy/AmazonS3FullAccess
+      Path: '/hauzzy-serverless-sam/'
+      Policies:
+        -
+          PolicyName: !Sub 'codebuild-access-cloudwatch-s3-${AWS::Region}'
+          PolicyDocument: !Sub '{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Resource":["arn:aws:logs:us-east-1:${AWS::AccountId}:log-group:/aws/codebuild/hauzzy-serverless-stack-build","arn:aws:logs:us-east-1:${AWS::AccountId}:log-group:/aws/codebuild/hauzzy-serverless-stack-build:*"],"Action":["logs:CreateLogGroup","logs:CreateLogStream","logs:PutLogEvents"]},{"Effect":"Allow","Resource":["arn:aws:s3:::codepipeline-us-east-1-*"],"Action":["s3:PutObject","s3:GetObject","s3:GetObjectVersion","s3:GetBucketAcl","s3:GetBucketLocation"]},{"Effect":"Allow","Resource":["arn:aws:s3:::aws-sam-cli-managed-default-samclisourcebucket-chfgod7k1eyc","arn:aws:s3:::aws-sam-cli-managed-default-samclisourcebucket-chfgod7k1eyc/*"],"Action":["s3:PutObject","s3:GetBucketAcl","s3:GetBucketLocation"]},{"Effect":"Allow","Action":["codebuild:CreateReportGroup","codebuild:CreateReport","codebuild:UpdateReport","codebuild:BatchPutTestCases"],"Resource":["arn:aws:codebuild:${AWS::Region}:${AWS::AccountId}:report-group/hauzzy-serverless-sam-*"]}]}'
+
 
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function

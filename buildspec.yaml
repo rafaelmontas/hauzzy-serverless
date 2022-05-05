@@ -11,4 +11,4 @@ phases:
       # Package SAM template
       # - sam package --template-file sam_template.yml --s3-bucket sam-artifacts-sou --output-template-file packaged.yaml
       # Deploy packaged SAM template
-      - sam deploy --stack-name hauzzy-serverless-stack --confirm-changeset --capabilities CAPABILITY_IAM
+      - sam deploy --stack-name hauzzy-serverless-stack --no-confirm-changeset --capabilities CAPABILITY_IAM

@@ -149,11 +149,11 @@ Resources:
         Type: GITHUB
         GitCloneDepth: 1
       Triggers:
-        Webhook: true
-        FilterGroups:
-          - - Type: EVENT
-              Pattern: PUSH
-              ExcludeMatchedPattern: false
+        Webhook: false
+        # FilterGroups:
+        #   - - Type: EVENT
+        #       Pattern: PUSH
+        #       ExcludeMatchedPattern: false
       BadgeEnabled: false
       LogsConfig:
         CloudWatchLogs: 
@@ -179,7 +179,7 @@ Resources:
       Policies:
         -
           PolicyName: !Sub 'codebuild-access-cloudwatch-s3-${AWS::Region}'
-          PolicyDocument: !Sub '{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Resource":["arn:aws:logs:us-east-1:${AWS::AccountId}:log-group:/aws/codebuild/hauzzy-serverless-stack-build","arn:aws:logs:us-east-1:${AWS::AccountId}:log-group:/aws/codebuild/hauzzy-serverless-stack-build:*"],"Action":["logs:CreateLogGroup","logs:CreateLogStream","logs:PutLogEvents"]},{"Effect":"Allow","Resource":["arn:aws:s3:::codepipeline-us-east-1-*"],"Action":["s3:PutObject","s3:GetObject","s3:GetObjectVersion","s3:GetBucketAcl","s3:GetBucketLocation"]},{"Effect":"Allow","Resource":["arn:aws:s3:::aws-sam-cli-managed-default-samclisourcebucket-chfgod7k1eyc","arn:aws:s3:::aws-sam-cli-managed-default-samclisourcebucket-chfgod7k1eyc/*"],"Action":["s3:PutObject","s3:GetBucketAcl","s3:GetBucketLocation"]},{"Effect":"Allow","Action":["codebuild:CreateReportGroup","codebuild:CreateReport","codebuild:UpdateReport","codebuild:BatchPutTestCases"],"Resource":["arn:aws:codebuild:${AWS::Region}:${AWS::AccountId}:report-group/hauzzy-serverless-sam-*"]}]}'
+          PolicyDocument: !Sub '{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Resource":["arn:aws:logs:us-east-1:${AWS::AccountId}:log-group:/aws/codebuild/hauzzy-serverless-stack-build","arn:aws:logs:us-east-1:${AWS::AccountId}:log-group:/aws/codebuild/hauzzy-serverless-stack-build:*"],"Action":["logs:CreateLogGroup","logs:CreateLogStream","logs:PutLogEvents"]},{"Effect":"Allow","Resource":["arn:aws:s3:::aws-sam-cli-managed-default-samclisourcebucket-chfgod7k1eyc/*"],"Action":["s3:PutObject","s3:GetObject","s3:GetObjectVersion","s3:GetBucketAcl","s3:GetBucketLocation"]},{"Effect":"Allow","Resource":["arn:aws:s3:::aws-sam-cli-managed-default-samclisourcebucket-chfgod7k1eyc","arn:aws:s3:::aws-sam-cli-managed-default-samclisourcebucket-chfgod7k1eyc/*"],"Action":["s3:PutObject","s3:GetBucketAcl","s3:GetBucketLocation"]},{"Effect":"Allow","Action":["codebuild:CreateReportGroup","codebuild:CreateReport","codebuild:UpdateReport","codebuild:BatchPutTestCases"],"Resource":["arn:aws:codebuild:${AWS::Region}:${AWS::AccountId}:report-group/hauzzy-serverless-sam-*"]}]}'
 
 
 Outputs:

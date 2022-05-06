@@ -136,7 +136,7 @@ Resources:
       Artifacts:
         Type: S3
         Location: aws-sam-cli-managed-default-samclisourcebucket-chfgod7k1eyc
-        # Name: hauzzy-serverless-stack-build
+        Name: hauzzy-serverless-stack-build
         Path: 'hauzzy-serverless-stack-build/'
         NamespaceType: NONE
         Packaging: NONE

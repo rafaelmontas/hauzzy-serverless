@@ -165,7 +165,6 @@ Resources:
   CodeBuildIAMRole:
     Type: AWS::IAM::Role
     Properties:
-      # RoleName: !Sub 'codebuild-sam-full-access-${AWS::Region}'
       Description: Provides CodeBuild permission to access API GW, Lambda and Cloudformation
       #Provide Codebuild permission to assume this role
       AssumeRolePolicyDocument: {"Version":"2012-10-17","Statement":[{"Effect":"Allow","Principal":{"Service":"codebuild.amazonaws.com"},"Action":"sts:AssumeRole"}]}

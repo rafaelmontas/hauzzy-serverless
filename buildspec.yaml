@@ -8,8 +8,11 @@ phases:
       #https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-deploying.html
       #Build spec reference
       #https://docs.aws.amazon.com/codebuild/latest/userguide/build-spec-ref.html
-      # Package SAM template
+      # Build app
       - sam build
+      # Run Unit Tests
+      - npm run test
+      # Package SAM template
       - sam package --s3-bucket aws-sam-cli-managed-default-samclisourcebucket-chfgod7k1eyc --s3-prefix packaged-functions --output-template-file .aws-sam/packaged.yaml
       # - sam package --template-file sam_template.yml --s3-bucket sam-artifacts-sou --output-template-file packaged.yaml
       # Deploy packaged SAM template

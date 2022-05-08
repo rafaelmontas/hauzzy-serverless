@@ -3,13 +3,12 @@
 const app = require('../../app.js');
 const chai = require('chai');
 const expect = chai.expect;
-const lambdaTester = require("lambda-tester");
-// let event, context;
+let context;
 
-const mockDataNull = {
+const eventNull = {
   queryStringParameters: null
 }
-const mockData = {
+const event = {
   queryStringParameters: {
     province: 'Distrito Nacional',
     sector: 'Ensanche Naco',
@@ -26,7 +25,7 @@ const mockData = {
 describe('Tests index', function () {
   this.timeout(30000)
   it('verifies successful response when queryStringParameters are not provided', async () => {
-    const result = await app.lambdaHandler(mockDataNull, context)
+    const result = await app.lambdaHandler(eventNull, context)
 
     expect(result).to.be.an('object');
     expect(result.statusCode).to.equal(200);
@@ -40,7 +39,7 @@ describe('Tests index', function () {
     // expect(response.location).to.be.an("string");
   });
   it('verifies successful response when queryStringParameters are provided', async () => {
-    const result = await app.lambdaHandler(mockData, context)
+    const result = await app.lambdaHandler(event, context)
 
     expect(result).to.be.an('object');
     expect(result.statusCode).to.equal(200);

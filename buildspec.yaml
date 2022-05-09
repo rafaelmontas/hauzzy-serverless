@@ -6,7 +6,7 @@ phases:
   pre_build:
     commands:
       # install server dependencies
-      - npm install
+      - npm install --prefix get-properties
   build:
     commands:
       - echo Build started on `date`
@@ -14,7 +14,7 @@ phases:
       # Build app
       - sam build
       # Run Unit Tests
-      - npm run test
+      - npm run test --prefix get-properties
   post_build:
     commands:
       - echo Packaging started on `date`

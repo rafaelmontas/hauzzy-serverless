@@ -1,4 +1,7 @@
 version: 0.2
+env:
+  variables:
+    AWS_XRAY_LOG_LEVEL: 'silent'
 phases:
   install:
     runtime-versions:
@@ -15,10 +18,8 @@ phases:
       - sam build
       # Run Unit Tests
       - npm run test --prefix get-properties
-  post_build:
-    commands:
-      - echo Packaging started on `date`
       # Package SAM template
+      - echo Packaging started on `date`
       - sam package --s3-bucket aws-sam-cli-managed-default-samclisourcebucket-chfgod7k1eyc --s3-prefix packaged-functions --output-template-file .aws-sam/packaged.yaml
 artifacts:
   files:

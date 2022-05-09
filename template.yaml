@@ -117,13 +117,17 @@ Resources:
             Sid: 'Allow use of the key'
             Effect: Allow
             Principal:
-              AWS: !GetAtt ParameterStoreCredentialsRole.Arn
+              AWS:
+                - !GetAtt ParameterStoreCredentialsRole.Arn
+                - !GetAtt CodeBuildIAMRole.Arn
+                - arn:aws:iam::925250455200:role/CloudFormationServiceRole
             Action:
               - 'kms:Encrypt'
               - 'kms:Decrypt'
               - 'kms:ReEncrypt*'
               - 'kms:GenerateDataKey*'
               - 'kms:DescribeKey'
+              - 'kms:PutKeyPolicy'
             Resource: '*'
 
   SamCodeBuild:

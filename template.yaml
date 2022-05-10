@@ -17,7 +17,11 @@ Resources:
     Type: AWS::Serverless::Api
     Properties:
       StageName: prod
-      # DefinitionUri: swagger.yaml
+      EndpointConfiguration:
+        Type: REGIONAL
+      Domain:
+        DomainName: www.hauzzy.com
+        CertificateArn: arn:aws:acm:us-east-1:925250455200:certificate/3e2bca34-59bc-454a-84cf-bd70c6d78a58
       
   GetPropertiesFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction

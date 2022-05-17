@@ -137,25 +137,66 @@ Resources:
   ServerlessPipeline:
     Type: AWS::CodePipeline::Pipeline
     Properties:
+      Name: ServerlessPipeline
       RoleArn: arn:aws:iam::925250455200:role/service-role/AWSCodePipelineServiceRole-us-east-1-HauzzyServerlessPipeline
+      ArtifactStore:
+        Type: S3
+        Location: aws-sam-cli-managed-default-samclisourcebucket-chfgod7k1eyc
       Stages:
         -
           Name: Source
           Actions:
-          -
-            Name: Source
-            ActionTypeId:
-              Category: Source
-              Owner: AWS
-              Version: 1
-              Provider: CodeStarSourceConnection
-            Configuration:
-              ConnectionArn: "arn:aws:codestar-connections:us-east-1:925250455200:connection/88c6b744-129c-417b-82ad-4e0b78cfb2d1"
-              FullRepositoryId: "rafaelmontas/hauzzy-serverless"
-              BranchName: "main"
-              OutputArtifactFormat: "CODE_ZIP"
-            OutputArtifacts:
-              -  Name: SourceArtifact
+            -
+              Name: Source
+              ActionTypeId:
+                Category: Source
+                Owner: AWS
+                Version: 1
+                Provider: CodeStarSourceConnection
+              Configuration:
+                ConnectionArn: "arn:aws:codestar-connections:us-east-1:925250455200:connection/88c6b744-129c-417b-82ad-4e0b78cfb2d1"
+                FullRepositoryId: "rafaelmontas/hauzzy-serverless"
+                BranchName: "main"
+                OutputArtifactFormat: "CODE_ZIP"
+              OutputArtifacts:
+                -  Name: SourceArtifact
+        -
+          Name: Build
+          Actions:
+            -
+              Name: Build
+              InputArtifacts:
+                - Name: SourceArtifact
+              ActionTypeId:
+                Category: Build
+                Owner: AWS
+                Version: 1
+                Provider: CodeBuild
+              Configuration:
+                ProjectName:
+                  Ref: SamCodeBuild
+              OutputArtifacts:
+                -  Name: BuildArtifact
+        -
+          Name: Deploy
+          Actions:
+            -
+              Name: Deploy
+              InputArtifacts:
+                - Name: BuildArtifact
+              ActionTypeId:
+                Category: Deploy
+                Owner: AWS
+                Version: 1
+                Provider: CloudFormation
+              Configuration:
+                ActionMode: CREATE_UPDATE
+                StackName: !Ref AWS::StackName
+                Capabilities: CAPABILITY_NAMED_IAM,CAPABILITY_AUTO_EXPAND
+                RoleArn: arn:aws:iam::925250455200:role/CloudFormationServiceRole
+                TemplatePath: BuildArtifact::.aws-sam/packaged.yaml
+
+
               
   
   SamCodeBuild:

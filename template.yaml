@@ -222,10 +222,6 @@ Resources:
         GitCloneDepth: 1
       Triggers:
         Webhook: false
-        # FilterGroups:
-        #   - - Type: EVENT
-        #       Pattern: PUSH
-        #       ExcludeMatchedPattern: false
       BadgeEnabled: false
       LogsConfig:
         CloudWatchLogs: 

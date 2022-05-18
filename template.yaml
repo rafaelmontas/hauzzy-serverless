@@ -40,7 +40,24 @@ Resources:
             Method: get
             RestApiId:
               Ref: HauzzyApi
-  
+  GetPropertyFunction:
+    Type: AWS::Serverless::Function
+    DependsOn: ParameterStoreCredentialsRole
+    Properties:
+      FunctionName: GetPropertyFunction
+      CodeUri: get-property/
+      Handler: app.lambdaHandler
+      MemorySize: 256
+      Role: !GetAtt ParameterStoreCredentialsRole.Arn
+      Events:
+        GetPropertyApiEvent:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /api/properties/{id}
+            Method: get
+            RestApiId:
+              Ref: HauzzyApi
+
   ParameterStoreCredentialsRole:
     Type: AWS::IAM::Role
     Properties:

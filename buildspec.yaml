@@ -10,6 +10,7 @@ phases:
     commands:
       # install server dependencies
       - npm install --prefix get-properties
+      - npm install --prefix get-property
   build:
     commands:
       - echo Build started on `date`
@@ -18,6 +19,7 @@ phases:
       - sam build
       # Run Unit Tests
       - npm run test --prefix get-properties
+      - npm run test --prefix get-property
       # Package SAM template
       - echo Packaging started on `date`
       - sam package --s3-bucket aws-sam-cli-managed-default-samclisourcebucket-chfgod7k1eyc --s3-prefix packaged-functions --output-template-file .aws-sam/packaged.yaml

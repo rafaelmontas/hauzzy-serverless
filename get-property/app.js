@@ -41,13 +41,11 @@ exports.lambdaHandler = async (event, context) => {
     response = {
       'statusCode': 200,
       'body': JSON.stringify({
-        message: 'property listing',
-        data: event.pathParameters,
         listing: listing
       })
     }
   } catch (error) {
-    console.log(err);
+    console.log(error);
     response = {
       'statusCode': 500,
     }
